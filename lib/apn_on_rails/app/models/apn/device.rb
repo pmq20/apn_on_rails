@@ -12,10 +12,10 @@ class APN::Device < APN::Base
   
   belongs_to :app, :class_name => 'APN::App'
   has_many :notifications, :class_name => 'APN::Notification'
-  has_many :unsent_notifications, :class_name => 'APN::Notification', :conditions => 'sent_at is null'
+  has_many :unsent_notifications, -> { where('sent_at is null')}, :class_name => 'APN::Notification'
   
   validates_uniqueness_of :token, :scope => :app_id
-  validates_format_of :token, :with => /^[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}$/
+  validates_format_of :token, :with => /\A[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\s[a-z0-9]{8}\z/
   
   before_create :set_last_registered_at
   
